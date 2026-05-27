@@ -72,13 +72,7 @@ export function LotteryWheel({
               background: gradient,
             }}
           >
-            {count === 0 ? (
-              <div className="flex h-full w-full items-center justify-center rounded-full bg-gray-100">
-                <p className="px-6 text-center text-sm text-gray-500">
-                  請在下方輸入抽獎名單
-                </p>
-              </div>
-            ) : (
+            {count > 0 &&
               candidates.map((entry, index) => {
                 const angle = -90 + index * slice + slice / 2;
                 return (
@@ -100,7 +94,7 @@ export function LotteryWheel({
                   </div>
                 );
               })
-            )}
+            }
           </div>
 
           <button
