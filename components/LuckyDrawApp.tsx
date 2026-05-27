@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback, useMemo, useRef, useState } from "react";
-import { DualTextInput } from "@/components/DualTextInput";
 import { LotteryWheel } from "@/components/LotteryWheel";
+import { NamesListInput } from "@/components/NamesListInput";
 import { PrizePanel } from "@/components/PrizePanel";
 import { SponsorFooter } from "@/components/SponsorFooter";
 import { WinnerModal } from "@/components/WinnerModal";
@@ -15,7 +15,6 @@ const SPIN_MS = 5000;
 export function LuckyDrawApp() {
   const [prizeTitle, setPrizeTitle] = useState("");
   const [imageDataUrl, setImageDataUrl] = useState<string | null>(null);
-  const [itemsText, setItemsText] = useState("");
   const [namesText, setNamesText] = useState("");
   const [wonIds, setWonIds] = useState<Set<string>>(() => new Set());
   const [rotation, setRotation] = useState(0);
@@ -99,19 +98,19 @@ export function LuckyDrawApp() {
   }, []);
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <header className="border-b border-[var(--bni-red)]/20 bg-white px-4 py-4 shadow-sm">
+    <div className="flex min-h-screen flex-col bg-[var(--bg)]">
+      <header className="border-b border-[var(--bni-red)] bg-[var(--bg-elevated)] px-4 py-4 shadow-[0_4px_24px_rgba(192,0,0,0.25)]">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3">
           <div>
-            <h1 className="text-2xl font-bold text-[var(--bni-red)]">
+            <h1 className="text-2xl font-bold text-white">
               BNI Lucky Draw
             </h1>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-[var(--text-muted)]">
               商務例會抽獎 · 僅本次瀏覽有效，關閉分頁即重置
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
-            <label className="flex cursor-pointer items-center gap-2 text-sm">
+            <label className="flex cursor-pointer items-center gap-2 text-sm text-[var(--text-muted)]">
               <input
                 type="checkbox"
                 checked={soundEnabled}
@@ -124,14 +123,14 @@ export function LuckyDrawApp() {
               type="button"
               onClick={resetWinners}
               disabled={isSpinning}
-              className="rounded-lg border border-[var(--bni-red)] px-4 py-2 text-sm font-medium text-[var(--bni-red)] transition hover:bg-[var(--bni-cream)] disabled:opacity-50"
+              className="rounded-lg border border-[var(--bni-red)] bg-transparent px-4 py-2 text-sm font-medium text-white transition hover:bg-[var(--bni-red)] disabled:opacity-50"
             >
               重置得獎紀錄
             </button>
           </div>
         </div>
         {statusMessage && (
-          <p className="mx-auto mt-2 max-w-6xl text-center text-sm text-[var(--bni-red-dark)]">
+          <p className="mx-auto mt-2 max-w-6xl text-center text-sm text-[var(--bni-red-light)]">
             {statusMessage}
           </p>
         )}
@@ -146,25 +145,19 @@ export function LuckyDrawApp() {
             onImageChange={setImageDataUrl}
             disabled={isSpinning}
           />
-          <LotteryWheel
-            candidates={candidates}
-            rotation={rotation}
-            isSpinning={isSpinning}
-            onSpin={handleSpin}
-          />
-        </div>
-
-        <div className="mt-8">
-          <DualTextInput
-            itemsText={itemsText}
-            namesText={namesText}
-            onItemsChange={setItemsText}
-            onNamesChange={setNamesText}
-            disabled={isSpinning}
-          />
-          <p className="mt-2 text-xs text-gray-500">
-            左欄為項目備忘、右欄為轉盤名單；兩者皆可輸入人名或獎項名稱。
-          </p>
+          <div className="flex flex-col items-center gap-3">
+            <LotteryWheel
+              candidates={candidates}
+              rotation={rotation}
+              isSpinning={isSpinning}
+              onSpin={handleSpin}
+            />
+            <NamesListInput
+              value={namesText}
+              onChange={setNamesText}
+              disabled={isSpinning}
+            />
+          </div>
         </div>
       </main>
 
