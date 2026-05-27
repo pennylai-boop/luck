@@ -145,7 +145,7 @@ export function LuckyDrawApp() {
             onImageChange={setImageDataUrl}
             disabled={isSpinning}
           />
-          <div className="flex flex-col items-center gap-3">
+          <div className="flex min-w-0 flex-col items-center gap-3">
             <LotteryWheel
               candidates={candidates}
               rotation={rotation}

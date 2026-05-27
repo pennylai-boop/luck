@@ -11,14 +11,18 @@ type LotteryWheelProps = {
   onSpin: () => void;
 };
 
+const WHEEL_A = "#f5f0e6";
+const WHEEL_B = "#ffffff";
+const WHEEL_EMPTY = "#e8e8e8";
+
 function buildWheelGradient(count: number): string {
-  if (count === 0) return "conic-gradient(#e5e5e5 0deg 360deg)";
+  if (count === 0) return `conic-gradient(${WHEEL_EMPTY} 0deg 360deg)`;
   const slice = segmentAngle(count);
   const parts: string[] = [];
   for (let i = 0; i < count; i++) {
     const start = i * slice;
     const end = (i + 1) * slice;
-    const color = i % 2 === 0 ? "var(--wheel-a)" : "var(--wheel-b)";
+    const color = i % 2 === 0 ? WHEEL_A : WHEEL_B;
     parts.push(`${color} ${start}deg ${end}deg`);
   }
   return `conic-gradient(from -90deg, ${parts.join(", ")})`;
@@ -37,24 +41,29 @@ export function LotteryWheel({
 
   return (
     <section
-      className="flex flex-col items-center"
+      className="flex w-full shrink-0 flex-col items-center"
       aria-label="幸運轉盤"
     >
-      <div className="relative w-full max-w-[min(90vw,420px)]">
+      {/* 固定寬高，避免 flex/grid 下 aspect-square 高度塌成 0 */}
+      <div
+        className="relative mx-auto shrink-0"
+        style={{
+          width: "min(420px, 100%)",
+          maxWidth: "420px",
+          aspectRatio: "1 / 1",
+        }}
+      >
         {/* Pointer */}
         <div
           className="absolute left-1/2 top-0 z-20 -translate-x-1/2 -translate-y-1"
           aria-hidden
         >
-          <div
-            className="h-0 w-0 border-x-[14px] border-b-[22px] border-x-transparent border-b-[var(--bni-gold)] drop-shadow-md"
-            style={{ filter: "drop-shadow(0 2px 2px rgba(0,0,0,0.25))" }}
-          />
+          <div className="h-0 w-0 border-x-[14px] border-b-[22px] border-x-transparent border-b-[#c9a227] drop-shadow-md" />
         </div>
 
-        <div className="relative mx-auto aspect-square w-full rounded-full border-[6px] border-[var(--bni-red)] bg-white p-1 shadow-lg">
+        <div className="absolute inset-0 rounded-full border-[6px] border-[#c00000] bg-white p-1 shadow-lg">
           <div
-            className="relative h-full w-full rounded-full"
+            className="absolute inset-1 overflow-hidden rounded-full"
             style={{
               transform: `rotate(${rotation}deg)`,
               transition: isSpinning
@@ -64,7 +73,7 @@ export function LotteryWheel({
             }}
           >
             {count === 0 ? (
-              <div className="absolute inset-0 flex items-center justify-center rounded-full bg-gray-100">
+              <div className="flex h-full w-full items-center justify-center rounded-full bg-gray-100">
                 <p className="px-6 text-center text-sm text-gray-500">
                   請在下方輸入抽獎名單
                 </p>
@@ -76,14 +85,12 @@ export function LotteryWheel({
                   <div
                     key={entry.id}
                     className="pointer-events-none absolute left-1/2 top-1/2 w-[42%] origin-left -translate-y-1/2"
-                    style={{
-                      transform: `rotate(${angle}deg)`,
-                    }}
+                    style={{ transform: `rotate(${angle}deg)` }}
                   >
                     <span
-                      className="block truncate text-center font-semibold leading-tight text-[var(--text)]"
+                      className="block truncate text-center text-sm font-semibold leading-tight text-[#1a1a1a]"
                       style={{
-                        fontSize: "clamp(0.6rem, 1.8vmin, 0.85rem)",
+                        fontSize: "clamp(0.6rem, 2.5vw, 0.85rem)",
                         transform: "rotate(90deg)",
                         transformOrigin: "center left",
                       }}
@@ -101,7 +108,7 @@ export function LotteryWheel({
             onClick={onSpin}
             disabled={!canSpin}
             aria-label="開始抽獎"
-            className="absolute left-1/2 top-1/2 z-10 flex h-[28%] w-[28%] min-h-[72px] min-w-[72px] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-full border-4 border-white bg-[var(--bni-red)] text-center text-sm font-bold text-white shadow-lg transition hover:bg-[var(--bni-red-dark)] disabled:cursor-not-allowed disabled:opacity-60"
+            className="absolute left-1/2 top-1/2 z-10 flex h-[28%] w-[28%] min-h-[72px] min-w-[72px] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-full border-4 border-white bg-[#c00000] text-center text-sm font-bold text-white shadow-lg transition hover:bg-[#900000] disabled:cursor-not-allowed disabled:opacity-60"
           >
             {isSpinning ? "抽獎中…" : "開始抽獎"}
           </button>
@@ -109,8 +116,9 @@ export function LotteryWheel({
       </div>
 
       {count > 0 && (
-        <p className="mt-4 text-sm text-gray-600">
-          尚可抽選：<span className="font-semibold text-[var(--bni-red)]">{count}</span> 人
+        <p className="mt-4 shrink-0 text-sm text-gray-600">
+          尚可抽選：
+          <span className="font-semibold text-[#c00000]">{count}</span> 人
         </p>
       )}
     </section>
