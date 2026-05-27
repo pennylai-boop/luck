@@ -4,15 +4,17 @@
   --bni-red: #c00000;
   --bni-red-dark: #900000;
   --bni-red-light: #e03030;
-  --bg: #000000;
-  --bg-elevated: #141414;
-  --bg-card: #0d0d0d;
+  --bni-cream: #f5f0e6;
+  --bni-gold: #c9a227;
+  --bg: #fafafa;
+  --bg-elevated: #ffffff;
+  --bg-card: #ffffff;
   --border: #c00000;
-  --text: #ffffff;
-  --text-muted: #a8a8a8;
-  --wheel-a: #1a1a1a;
-  --wheel-b: #c00000;
-  --input-bg: #1a1a1a;
+  --text: #1a1a1a;
+  --text-muted: #666666;
+  --wheel-a: #f5f0e6;
+  --wheel-b: #ffffff;
+  --input-bg: #ffffff;
 }
 
 body {

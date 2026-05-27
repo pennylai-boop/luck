@@ -12,7 +12,7 @@ type LotteryWheelProps = {
 };
 
 function buildWheelGradient(count: number): string {
-  if (count === 0) return "conic-gradient(#1a1a1a 0deg 360deg)";
+  if (count === 0) return "conic-gradient(#e5e5e5 0deg 360deg)";
   const slice = segmentAngle(count);
   const parts: string[] = [];
   for (let i = 0; i < count; i++) {
@@ -47,12 +47,12 @@ export function LotteryWheel({
           aria-hidden
         >
           <div
-            className="h-0 w-0 border-x-[14px] border-b-[22px] border-x-transparent border-b-white drop-shadow-md"
+            className="h-0 w-0 border-x-[14px] border-b-[22px] border-x-transparent border-b-[var(--bni-gold)] drop-shadow-md"
             style={{ filter: "drop-shadow(0 2px 2px rgba(0,0,0,0.25))" }}
           />
         </div>
 
-        <div className="relative mx-auto aspect-square w-full rounded-full border-[6px] border-[var(--bni-red)] bg-black p-1 shadow-[0_0_40px_rgba(192,0,0,0.45)]">
+        <div className="relative mx-auto aspect-square w-full rounded-full border-[6px] border-[var(--bni-red)] bg-white p-1 shadow-lg">
           <div
             className="relative h-full w-full rounded-full"
             style={{
@@ -64,8 +64,8 @@ export function LotteryWheel({
             }}
           >
             {count === 0 ? (
-              <div className="absolute inset-0 flex items-center justify-center rounded-full bg-[var(--wheel-a)]">
-                <p className="px-6 text-center text-sm text-[var(--text-muted)]">
+              <div className="absolute inset-0 flex items-center justify-center rounded-full bg-gray-100">
+                <p className="px-6 text-center text-sm text-gray-500">
                   請在下方輸入抽獎名單
                 </p>
               </div>
@@ -81,7 +81,7 @@ export function LotteryWheel({
                     }}
                   >
                     <span
-                      className="block truncate text-center font-semibold leading-tight text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]"
+                      className="block truncate text-center font-semibold leading-tight text-[var(--text)]"
                       style={{
                         fontSize: "clamp(0.6rem, 1.8vmin, 0.85rem)",
                         transform: "rotate(90deg)",
@@ -101,7 +101,7 @@ export function LotteryWheel({
             onClick={onSpin}
             disabled={!canSpin}
             aria-label="開始抽獎"
-            className="absolute left-1/2 top-1/2 z-10 flex h-[28%] w-[28%] min-h-[72px] min-w-[72px] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-full border-4 border-black bg-[var(--bni-red)] text-center text-sm font-bold text-white shadow-lg transition hover:bg-[var(--bni-red-light)] disabled:cursor-not-allowed disabled:opacity-60"
+            className="absolute left-1/2 top-1/2 z-10 flex h-[28%] w-[28%] min-h-[72px] min-w-[72px] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-full border-4 border-white bg-[var(--bni-red)] text-center text-sm font-bold text-white shadow-lg transition hover:bg-[var(--bni-red-dark)] disabled:cursor-not-allowed disabled:opacity-60"
           >
             {isSpinning ? "抽獎中…" : "開始抽獎"}
           </button>
@@ -109,7 +109,7 @@ export function LotteryWheel({
       </div>
 
       {count > 0 && (
-        <p className="mt-4 text-sm text-[var(--text-muted)]">
+        <p className="mt-4 text-sm text-gray-600">
           尚可抽選：<span className="font-semibold text-[var(--bni-red)]">{count}</span> 人
         </p>
       )}

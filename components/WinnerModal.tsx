@@ -68,25 +68,25 @@ export function WinnerModal({
       aria-modal="true"
       aria-labelledby="winner-title"
     >
-      <div className="animate-[modalIn_0.35s_ease-out] w-full max-w-md overflow-hidden rounded-2xl border-2 border-[var(--bni-red)] bg-[var(--bg-card)] shadow-[0_0_48px_rgba(192,0,0,0.5)]">
-        <div className="h-2 bg-[var(--bni-red)]" />
+      <div className="animate-[modalIn_0.35s_ease-out] w-full max-w-md overflow-hidden rounded-2xl bg-white shadow-2xl">
+        <div className="h-1.5 bg-[var(--bni-red)]" />
         <div className="p-8 text-center">
           <p className="text-sm font-medium uppercase tracking-wide text-[var(--bni-red)]">
             恭喜得獎
           </p>
-          <h2 id="winner-title" className="mt-2 text-3xl font-bold text-white">
+          <h2 id="winner-title" className="mt-2 text-3xl font-bold text-[var(--text)]">
             {winnerName}
           </h2>
           {prizeTitle ? (
-            <p className="mt-3 text-[var(--text-muted)]">
-              項目：<span className="font-semibold text-white">{prizeTitle}</span>
+            <p className="mt-3 text-gray-600">
+              項目：<span className="font-semibold text-[var(--text)]">{prizeTitle}</span>
             </p>
           ) : null}
           <button
             ref={closeRef}
             type="button"
             onClick={onClose}
-            className="mt-8 w-full rounded-xl bg-[var(--bni-red)] py-3 text-lg font-semibold text-white transition hover:bg-[var(--bni-red-light)]"
+            className="mt-8 w-full rounded-xl bg-[var(--bni-red)] py-3 text-lg font-semibold text-white transition hover:bg-[var(--bni-red-dark)]"
           >
             繼續抽獎
           </button>

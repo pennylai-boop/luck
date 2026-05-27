@@ -99,10 +99,10 @@ export function LuckyDrawApp() {
 
   return (
     <div className="flex min-h-screen flex-col bg-[var(--bg)]">
-      <header className="border-b border-[var(--bni-red)] bg-[var(--bg-elevated)] px-4 py-4 shadow-[0_4px_24px_rgba(192,0,0,0.25)]">
+      <header className="border-b border-[var(--bni-red)]/20 bg-white px-4 py-4 shadow-sm">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3">
           <div>
-            <h1 className="text-2xl font-bold text-white">
+            <h1 className="text-2xl font-bold text-[var(--bni-red)]">
               BNI Lucky Draw
             </h1>
             <p className="text-xs text-[var(--text-muted)]">
@@ -110,7 +110,7 @@ export function LuckyDrawApp() {
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
-            <label className="flex cursor-pointer items-center gap-2 text-sm text-[var(--text-muted)]">
+            <label className="flex cursor-pointer items-center gap-2 text-sm text-[var(--text)]">
               <input
                 type="checkbox"
                 checked={soundEnabled}
@@ -123,14 +123,14 @@ export function LuckyDrawApp() {
               type="button"
               onClick={resetWinners}
               disabled={isSpinning}
-              className="rounded-lg border border-[var(--bni-red)] bg-transparent px-4 py-2 text-sm font-medium text-white transition hover:bg-[var(--bni-red)] disabled:opacity-50"
+              className="rounded-lg border border-[var(--bni-red)] px-4 py-2 text-sm font-medium text-[var(--bni-red)] transition hover:bg-[var(--bni-cream)] disabled:opacity-50"
             >
               重置得獎紀錄
             </button>
           </div>
         </div>
         {statusMessage && (
-          <p className="mx-auto mt-2 max-w-6xl text-center text-sm text-[var(--bni-red-light)]">
+          <p className="mx-auto mt-2 max-w-6xl text-center text-sm text-[var(--bni-red-dark)]">
             {statusMessage}
           </p>
         )}
