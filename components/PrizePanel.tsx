@@ -57,7 +57,7 @@ export function PrizePanel({
 
   return (
     <section
-      className="flex w-full max-w-sm flex-col rounded-2xl border-2 border-[var(--bni-red)] bg-white p-4 shadow-md"
+      className="flex w-full flex-col rounded-2xl border-2 border-[var(--bni-red)] bg-white p-4 shadow-lg"
       aria-label="抽獎項目"
     >
       <h2 className="mb-2 text-lg font-bold text-[var(--bni-red)]">抽獎項目</h2>

@@ -14,7 +14,13 @@
   --text-muted: #666666;
   --wheel-a: #f5f0e6;
   --wheel-b: #ffffff;
-  --input-bg: #ffffff;
+  --float-kofi-left: 1rem;
+  --float-kofi-bottom: 1rem;
+  --float-kofi-height: 3.25rem;
+  --float-prize-gap: 0.75rem;
+  --float-prize-bottom: calc(
+    var(--float-kofi-bottom) + var(--float-kofi-height) + var(--float-prize-gap)
+  );
 }
 
 body {
@@ -33,4 +39,12 @@ body {
     opacity: 1;
     transform: scale(1);
   }
+}
+
+/* Ko-fi「請我喝杯咖啡」固定左下角 */
+.floatingchat-container-wrap,
+#kofi-widget-overlay {
+  left: var(--float-kofi-left) !important;
+  right: auto !important;
+  bottom: var(--float-kofi-bottom) !important;
 }

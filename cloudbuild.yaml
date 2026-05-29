@@ -3,7 +3,13 @@ steps:
     args:
       - build
       - "-f"
-      - "Dockerfile.deploy"
+      - "Dockerfile"
+      - "--build-arg"
+      - "NEXT_PUBLIC_SITE_URL=${_SITE_URL}"
+      - "--build-arg"
+      - "NEXT_PUBLIC_GOOGLE_ADS_CLIENT=${_ADS_CLIENT}"
+      - "--build-arg"
+      - "NEXT_PUBLIC_GOOGLE_ADS_SLOT=${_ADS_SLOT}"
       - "-t"
       - "${_REGION}-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/lucky-draw:latest"
       - "."
@@ -35,6 +41,9 @@ steps:
 
 substitutions:
   _REGION: asia-east1
+  _SITE_URL: https://lucky-draw-u5bq4dbqdq-de.a.run.app
+  _ADS_CLIENT: ca-pub-9537577150806292
+  _ADS_SLOT: "2130099221"
 
 images:
   - "${_REGION}-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/lucky-draw:latest"

@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "node ./node_modules/next/dist/bin/next dev",
+    "dev": "node scripts/dev.mjs",
     "build": "node ./node_modules/next/dist/bin/next build",
     "start": "node ./node_modules/next/dist/bin/next start",
     "lint": "node ./node_modules/eslint/bin/eslint.js .",
-    "deploy": "npm run build && gcloud builds submit --config cloudbuild.yaml --project lucky-497805 --quiet",
+    "deploy": "gcloud builds submit --config cloudbuild.yaml --project lucky-497805 --quiet",
     "deploy:run": "gcloud run deploy lucky-draw --image asia-east1-docker.pkg.dev/lucky-497805/cloud-run-source-deploy/lucky-draw:latest --region asia-east1 --project lucky-497805 --allow-unauthenticated --port 8080 --quiet"
   },
   "dependencies": {

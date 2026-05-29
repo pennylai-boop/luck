@@ -44,16 +44,16 @@ export function LotteryWheel({
       className="flex h-full w-full min-h-0 flex-col items-center justify-center"
       aria-label="幸運轉盤"
     >
-      <div className="@container flex min-h-0 w-full flex-1 items-center justify-center">
+      <div className="@container flex min-h-0 w-full max-h-[66.67%] flex-1 items-center justify-center">
         <div
-          className="relative aspect-square w-[min(100cqw,100cqh)] shrink-0"
+          className="relative aspect-square w-[min(100cqw,calc(100cqh*2/3))] shrink-0"
         >
         {/* Pointer */}
         <div
           className="absolute left-1/2 top-0 z-20 -translate-x-1/2 -translate-y-1"
           aria-hidden
         >
-          <div className="h-0 w-0 border-x-[14px] border-b-[22px] border-x-transparent border-b-[#c9a227] drop-shadow-md" />
+          <div className="h-0 w-0 rotate-180 border-x-[14px] border-b-[22px] border-x-transparent border-b-[#c9a227] drop-shadow-md" />
         </div>
 
         <div className="absolute inset-0 rounded-full border-[6px] border-[#c00000] bg-white p-1 shadow-lg">

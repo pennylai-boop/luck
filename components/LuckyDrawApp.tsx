@@ -99,9 +99,9 @@ export function LuckyDrawApp() {
 
   return (
     <div className="bg-[var(--bg)]">
-      <div className="flex h-[1080px] flex-col overflow-hidden">
-        <header className="shrink-0 border-b border-[var(--bni-red)]/20 bg-white px-4 py-4 shadow-sm">
-          <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3">
+      <div className="relative mx-auto flex h-[1080px] w-full max-w-[1920px] flex-col overflow-hidden">
+        <header className="shrink-0 border-b border-[var(--bni-red)]/20 bg-white py-4 pl-2 pr-4 shadow-sm">
+          <div className="mx-auto flex w-full max-w-[1920px] flex-wrap items-center justify-between gap-3">
             <div>
               <h1 className="text-2xl font-bold text-[var(--bni-red)]">
                 BNI Lucky Draw
@@ -131,25 +131,35 @@ export function LuckyDrawApp() {
             </div>
           </div>
           {statusMessage && (
-            <p className="mx-auto mt-2 max-w-6xl text-center text-sm text-[var(--bni-red-dark)]">
+            <p className="mx-auto mt-2 w-full max-w-[1920px] text-center text-sm text-[var(--bni-red-dark)]">
               {statusMessage}
             </p>
           )}
         </header>
 
-        <main className="mx-auto flex w-full max-w-6xl min-h-0 flex-1 flex-col pl-4 pt-2 pr-4 pb-4">
-          <div className="grid min-h-0 flex-1 gap-4 lg:grid-cols-[minmax(0,380px)_1fr] lg:items-stretch lg:gap-6">
-            <div className="flex items-start justify-start self-start">
-              <PrizePanel
-                title={prizeTitle}
-                imageDataUrl={imageDataUrl}
-                namesText={namesText}
-                onTitleChange={setPrizeTitle}
-                onImageChange={setImageDataUrl}
-                onNamesChange={setNamesText}
-                disabled={isSpinning}
-              />
-            </div>
+        {/* 抽獎項目：左側浮動，位於 Ko-fi 按鈕上方 */}
+        <div
+          className="fixed left-4 z-40 w-[380px] max-w-[calc(100vw-2rem)]"
+          style={{
+            bottom: "var(--float-prize-bottom)",
+            maxHeight: "calc(100vh - var(--float-prize-bottom) - 1rem)",
+          }}
+        >
+          <div className="max-h-[inherit] overflow-y-auto rounded-2xl shadow-xl">
+            <PrizePanel
+              title={prizeTitle}
+              imageDataUrl={imageDataUrl}
+              namesText={namesText}
+              onTitleChange={setPrizeTitle}
+              onImageChange={setImageDataUrl}
+              onNamesChange={setNamesText}
+              disabled={isSpinning}
+            />
+          </div>
+        </div>
+
+        <main className="mx-auto flex w-full max-w-[1920px] min-h-0 flex-1 flex-col pl-2 pt-2 pr-4 pb-4">
+          <div className="flex min-h-0 flex-1 items-center justify-center">
             <div className="@container flex h-full min-h-0 w-full min-w-0 flex-col items-center justify-center">
               <LotteryWheel
                 candidates={candidates}
@@ -164,9 +174,13 @@ export function LuckyDrawApp() {
               href="https://introvista.ai"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs text-[var(--text-muted)] transition hover:text-[var(--text)]"
+              className="inline-flex items-center gap-1 text-xs text-[var(--text-muted)] transition hover:text-[var(--text)]"
+              aria-label="Copyright 2026 introvista x fore cons."
             >
-              © 2026 introvista
+              <span aria-hidden className="text-sm leading-none">
+                ©
+              </span>
+              <span>2026 introvista x fore cons.</span>
             </a>
           </p>
         </main>

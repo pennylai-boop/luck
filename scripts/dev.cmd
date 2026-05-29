@@ -12,11 +12,16 @@ if not exist "node_modules\next\dist\bin\next" (
   if errorlevel 1 exit /b 1
 )
 
+REM 清除網路磁碟上可能被鎖定的舊 .next
+if exist ".next" (
+  rmdir /s /q ".next" 2>nul
+)
+
 echo.
 echo 啟動開發伺服器: http://localhost:3000
 echo 按 Ctrl+C 結束
 echo.
-call npm run dev
+call node scripts/dev.mjs
 set EXITCODE=%ERRORLEVEL%
 popd
 exit /b %EXITCODE%
