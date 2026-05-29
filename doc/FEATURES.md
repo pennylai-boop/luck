@@ -74,6 +74,6 @@
 | 原始需求 | 實作位置 |
 |----------|----------|
 | 左圖右轉盤、彈窗煙火、排除已得獎 | `PrizePanel`, `LotteryWheel`, `WinnerModal` |
-| 下方輸入空格/換行 | `DualTextInput` + `parseLines` |
+| 名單輸入（轉盤下方） | `NamesListInput` + `parseLines` |
 | 請我喝杯咖啡 | `SponsorFooter` |
 | 上傳獎項圖 | `PrizePanel` 上傳區 |

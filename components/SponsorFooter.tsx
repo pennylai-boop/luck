@@ -1,21 +1,39 @@
-/** Replace with your Ko-fi / Buy Me a Coffee URL */
-const SPONSOR_URL = "https://www.buymeacoffee.com/";
+"use client";
+
+import Script from "next/script";
+import { GoogleAd } from "@/components/GoogleAd";
+
+const KOFI_USERNAME = "T6T71VQ7LT";
+const BNI_RED = "#c00000";
+
+declare global {
+  interface Window {
+    kofiWidgetOverlay?: {
+      draw: (username: string, options: Record<string, string>) => void;
+    };
+  }
+}
+
+function initKofiWidget() {
+  window.kofiWidgetOverlay?.draw(KOFI_USERNAME, {
+    type: "floating-chat",
+    "floating-chat.donateButton.text": "請我喝杯咖啡",
+    "floating-chat.donateButton.background-color": BNI_RED,
+    "floating-chat.donateButton.text-color": "#fff",
+  });
+}
 
 export function SponsorFooter() {
   return (
-    <footer className="border-t border-gray-200 py-6 text-center">
-      <a
-        href={SPONSOR_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 rounded-full bg-[var(--bni-red)] px-6 py-2.5 text-sm font-semibold text-white shadow transition hover:bg-[var(--bni-red-dark)]"
-      >
-        <span aria-hidden>☕</span>
-        請我喝杯咖啡
-      </a>
-      <p className="mt-2 text-xs text-gray-500">
-        感謝您的支持，讓抽獎工具持續優化
-      </p>
-    </footer>
+    <>
+      <Script
+        src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"
+        strategy="afterInteractive"
+        onLoad={initKofiWidget}
+      />
+      <footer className="w-full border-t border-gray-200 bg-white py-4">
+        <GoogleAd />
+      </footer>
+    </>
   );
 }

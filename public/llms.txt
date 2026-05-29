@@ -1,0 +1,40 @@
+# BNI Lucky Draw / 免費線上抽獎器
+
+> Free online lottery wheel and prize draw web app for live events.
+
+## What is this?
+
+A free web-based 抽獎器 (lottery draw tool) with a visual 幸運轉盤 (lucky wheel).
+Users can set 獎項 (prize categories), upload 獎品 (prize) images, import name lists, and run live 現場抽獎 (on-site draws).
+
+## Keywords
+
+抽獎, 獎項, 獎品, 抽獎APP, 抽獎器, 線上抽獎, 免費抽獎, 幸運轉盤, 轉盤抽獎, 現場抽獎, 抽獎工具, lucky draw, lottery wheel, prize draw
+
+## Features
+
+- Visual spinning wheel for fair random draws
+- Custom prize title and prize image upload
+- Name list input (space, newline, or punctuation separated)
+- Winners are excluded from subsequent spins
+- 1080p projection-friendly layout
+- Confetti celebration and winner modal
+- No login, no backend, no install — runs in browser
+
+## Use cases
+
+- BNI business meetings
+- Corporate events and year-end parties (尾牙)
+- Wedding giveaways
+- Classroom or community raffles
+- Any live event needing a 抽獎工具
+
+## Technical
+
+- Next.js static web app (pure frontend)
+- Traditional Chinese UI (zh-Hant)
+- Made by introvista: https://introvista.ai
+
+## Canonical
+
+Set NEXT_PUBLIC_SITE_URL to your deployed URL for production SEO.

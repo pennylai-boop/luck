@@ -79,7 +79,7 @@ export function WinnerModal({
           </h2>
           {prizeTitle ? (
             <p className="mt-3 text-gray-600">
-              項目：<span className="font-semibold">{prizeTitle}</span>
+              項目：<span className="font-semibold text-[var(--text)]">{prizeTitle}</span>
             </p>
           ) : null}
           <button
@@ -92,8 +92,11 @@ export function WinnerModal({
           </button>
         </div>
       </div>
-      {/* Optional: add public/sounds/win.mp3 for celebration audio */}
-      <audio ref={audioRef} src="/sounds/win.mp3" preload="auto" />
+      <audio
+        ref={audioRef}
+        src="/sounds/congratulations.wav"
+        preload="auto"
+      />
     </div>
   );
 }

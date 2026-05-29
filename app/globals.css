@@ -1,16 +1,24 @@
 @import "tailwindcss";
 
 :root {
-  --bni-red: #c8102e;
-  --bni-red-dark: #8b0000;
+  --bni-red: #c00000;
+  --bni-red-dark: #900000;
+  --bni-red-light: #e03030;
   --bni-cream: #f5f0e6;
   --bni-gold: #c9a227;
-  --surface: #fafafa;
+  --bg: #fafafa;
+  --bg-elevated: #ffffff;
+  --bg-card: #ffffff;
+  --border: #c00000;
   --text: #1a1a1a;
+  --text-muted: #666666;
+  --wheel-a: #f5f0e6;
+  --wheel-b: #ffffff;
+  --input-bg: #ffffff;
 }
 
 body {
-  background: var(--surface);
+  background: var(--bg);
   color: var(--text);
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans TC",
     sans-serif;

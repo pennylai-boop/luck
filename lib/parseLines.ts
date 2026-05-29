@@ -1,9 +1,9 @@
 import type { ListEntry } from "./types";
 
-/** Split by whitespace or newlines; drop empty tokens. */
+/** Split by whitespace, newlines, or common punctuation; drop empty tokens. */
 export function parseLines(text: string): string[] {
   return text
-    .split(/\s+|\n+/)
+    .split(/[\s\n,，;；、|·]+/)
     .map((s) => s.trim())
     .filter(Boolean);
 }

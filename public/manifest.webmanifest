@@ -1,0 +1,11 @@
+{
+  "name": "免費線上抽獎器 — 幸運轉盤抽獎 APP",
+  "short_name": "抽獎器",
+  "description": "免費線上抽獎器與幸運轉盤抽獎 APP：支援獎項、獎品設定與名單匯入，一鍵現場抽獎。",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fafafa",
+  "theme_color": "#c00000",
+  "lang": "zh-Hant",
+  "categories": ["entertainment", "utilities"]
+}
