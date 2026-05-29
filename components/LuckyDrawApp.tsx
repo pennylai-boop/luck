@@ -2,6 +2,7 @@
 
 import { useCallback, useMemo, useRef, useState } from "react";
 import { LotteryWheel } from "@/components/LotteryWheel";
+import { NamesListInput } from "@/components/NamesListInput";
 import { PrizePanel } from "@/components/PrizePanel";
 import { SponsorFooter } from "@/components/SponsorFooter";
 import { WinnerModal } from "@/components/WinnerModal";
