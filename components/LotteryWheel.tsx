@@ -47,12 +47,12 @@ export function LotteryWheel({
 
   return (
     <section
-      className="relative flex h-full w-full min-h-0 items-center justify-center"
+      className="relative flex h-full w-full min-h-0 items-start justify-center lg:items-center"
       aria-label="幸運轉盤"
     >
-      <div className="@container flex h-full w-full [container-type:size] items-center justify-center">
-        <div className="relative aspect-square size-[min(90cqw,90cqh)] max-h-full max-w-full shrink-0">
-          {/* Pointer */}
+      <div className="@container flex h-full w-full [container-type:size] items-start justify-center lg:items-center">
+        <div className="relative aspect-square size-[min(82vw,calc(60dvh-8rem))] max-h-full max-w-full shrink-0 lg:size-[min(90cqw,90cqh)]">
+          {/* Pointer — top center, same position on mobile and desktop */}
           <div
             className="absolute left-1/2 top-[11px] z-20 -translate-x-1/2"
             aria-hidden

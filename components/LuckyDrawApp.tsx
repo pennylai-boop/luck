@@ -4,6 +4,7 @@ import { useCallback, useMemo, useRef, useState } from "react";
 import { LotteryWheel } from "@/components/LotteryWheel";
 import { SponsorFooter } from "@/components/SponsorFooter";
 import { WinnerModal } from "@/components/WinnerModal";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { parseLines, toListEntries } from "@/lib/parseLines";
 import type { ListEntry } from "@/lib/types";
 import { computeStopRotation, pickRandomIndex } from "@/lib/wheelMath";
@@ -24,6 +25,7 @@ export function LuckyDrawApp() {
 
   const pendingWinnerRef = useRef<ListEntry | null>(null);
   const spinTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
 
   const allEntries = useMemo(() => toListEntries(parseLines(namesText)), [namesText]);
   const candidates = useMemo(
@@ -80,112 +82,114 @@ export function LuckyDrawApp() {
 
   return (
     <>
-    {/* header + wheel/panel + red band = exactly 100vh */}
+    {/* Mobile: vertical stack · Desktop: header + wheel/panel + red band = 100vh */}
     <div
-      className="relative grid h-screen overflow-hidden bg-white"
+      className="relative flex h-dvh flex-col overflow-hidden bg-white lg:grid lg:h-screen"
       style={{ gridTemplateRows: `${CHROME_BAR_H} 1fr ${CHROME_BAR_H}` }}
     >
-      {/* ── Row 1: Header ── */}
+      {/* ── Header ── */}
       <header className="flex shrink-0 flex-col justify-center bg-[#c00000] px-6 py-3">
         <h1 className="text-2xl font-extrabold tracking-wide text-white">抽獎輪盤</h1>
         <p className="text-xs text-white/75">活動抽獎使用，關閉畫面即重置</p>
       </header>
 
-      {/* ── Row 2: Wheel + control panel ── */}
-      <main className="flex h-full min-h-0 overflow-visible">
+      {/* ── Wheel + control panel ── */}
+      <main className="flex min-h-0 flex-1 flex-col overflow-visible lg:h-full lg:flex-row">
+        {/* Wheel area — white */}
+        <div className="relative flex min-h-0 flex-1 items-start justify-center overflow-visible bg-white px-2 pt-2 pb-8 lg:h-full lg:items-center lg:flex-[2] lg:px-0 lg:py-0">
+          <LotteryWheel
+            candidates={candidates}
+            rotation={rotation}
+            isSpinning={isSpinning}
+            onSpin={handleSpin}
+            prizeTitle={prizeTitle}
+          />
+        </div>
 
-          {/* Left — white wheel area, 2/3 width */}
-          <div className="flex h-full min-h-0 flex-[2] items-center justify-center overflow-visible bg-white">
-            <LotteryWheel
-              candidates={candidates}
-              rotation={rotation}
-              isSpinning={isSpinning}
-              onSpin={handleSpin}
-              prizeTitle={prizeTitle}
-            />
-          </div>
+        {/* Control panel — red on mobile, white sidebar on desktop */}
+        <div className="relative -mt-4 flex h-[40dvh] w-full shrink-0 flex-col overflow-y-auto bg-[#c00000] px-4 pb-3 pt-8 lg:mt-0 lg:h-full lg:w-1/3 lg:overflow-hidden lg:bg-white lg:px-8 lg:py-8">
+          {candidates.length > 0 && (
+            <p className="mb-1 text-center text-xs text-white lg:hidden">
+              尚可抽選：
+              <span className="font-semibold">{candidates.length}</span> 項
+            </p>
+          )}
 
-          {/* Right — control panel, 1/3 width */}
-          <div className="flex h-full w-1/3 shrink-0 flex-col overflow-hidden bg-white px-8 py-8">
-            <div className="flex min-h-0 flex-1 flex-col justify-center">
-              {/* 項目名稱 */}
-              <div className="mb-6">
-                <label
-                  htmlFor="prize-title"
-                  className="mb-2 block text-lg font-bold text-[#c00000]"
-                >
-                  項目名稱
-                </label>
-                <input
-                  id="prize-title"
-                  type="text"
-                  value={prizeTitle}
-                  onChange={(e) => setPrizeTitle(e.target.value)}
-                  disabled={isSpinning}
-                  placeholder="輸入抽獎項目名稱"
-                  className="w-full rounded-xl border-4 border-[#c00000] px-4 py-3 text-sm text-gray-700 transition focus:outline-none disabled:opacity-60"
-                />
-              </div>
-
-              {/* 抽獎名單 */}
-              <div className="mb-6">
-                <label
-                  htmlFor="names-input"
-                  className="mb-2 block text-lg font-bold text-[#c00000]"
-                >
-                  抽獎名單
-                </label>
-                <textarea
-                  id="names-input"
-                  value={namesText}
-                  onChange={(e) => setNamesText(e.target.value)}
-                  disabled={isSpinning}
-                  rows={7}
-                  placeholder="輸入參與者姓名，以空格、換行或標點符號分隔…"
-                  className="w-full resize-none rounded-xl border-4 border-[#c00000] px-4 py-3 text-sm text-gray-700 transition focus:outline-none disabled:opacity-60"
-                />
-              </div>
-
-              {/* Reset + Sound */}
-              <div className="flex items-center gap-3">
-                <button
-                  type="button"
-                  onClick={resetWinners}
-                  disabled={isSpinning}
-                  className="flex-1 rounded-xl bg-[#c00000] px-6 py-3 text-base font-bold text-white shadow-md transition hover:bg-[#a00000] active:bg-[#900000] disabled:opacity-50"
-                >
-                  重置名單
-                </button>
-                <label className="flex cursor-pointer items-center gap-2 text-sm text-gray-600">
-                  <input
-                    type="checkbox"
-                    checked={soundEnabled}
-                    onChange={(e) => setSoundEnabled(e.target.checked)}
-                    className="h-4 w-4 accent-[#c00000]"
-                  />
-                  慶祝音效
-                </label>
-              </div>
-
-              {statusMessage && (
-                <p className="mt-3 text-sm text-[#c00000]">{statusMessage}</p>
-              )}
+          <div className="flex min-h-0 flex-1 flex-col justify-center lg:justify-center">
+            <div className="mb-2 lg:mb-6">
+              <label
+                htmlFor="prize-title"
+                className="mb-1 block text-base font-bold text-white lg:mb-2 lg:text-lg lg:text-[#c00000]"
+              >
+                項目名稱
+              </label>
+              <input
+                id="prize-title"
+                type="text"
+                value={prizeTitle}
+                onChange={(e) => setPrizeTitle(e.target.value)}
+                disabled={isSpinning}
+                placeholder="輸入抽獎項目名稱"
+                className="w-full rounded-xl border-0 bg-white px-3 py-2 text-sm text-gray-700 transition focus:outline-none disabled:opacity-60 lg:border-4 lg:border-[#c00000] lg:px-4 lg:py-3"
+              />
             </div>
 
-            {/* Copyright — pinned to bottom */}
-            <a
-              href="https://introvista.ai"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="shrink-0 pt-4 text-center text-xs text-gray-400 transition hover:text-gray-600"
-            >
-              © 2026 introvista x fore cons.
-            </a>
+            <div className="mb-2 lg:mb-6">
+              <label
+                htmlFor="names-input"
+                className="mb-1 block text-base font-bold text-white lg:mb-2 lg:text-lg lg:text-[#c00000]"
+              >
+                抽獎名單
+              </label>
+              <textarea
+                id="names-input"
+                value={namesText}
+                onChange={(e) => setNamesText(e.target.value)}
+                disabled={isSpinning}
+                rows={isDesktop ? 7 : 2}
+                placeholder="輸入參與者姓名，以空格、換行或標點符號分隔…"
+                className="w-full resize-none rounded-xl border-0 bg-white px-3 py-2 text-sm text-gray-700 transition focus:outline-none disabled:opacity-60 lg:border-4 lg:border-[#c00000] lg:px-4 lg:py-3"
+              />
+            </div>
+
+            <div className="flex flex-row items-center justify-center gap-3 lg:justify-start">
+              <button
+                type="button"
+                onClick={resetWinners}
+                disabled={isSpinning}
+                className="rounded-xl bg-white px-6 py-1.5 text-sm font-bold text-[#c00000] shadow-md transition hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 lg:flex-1 lg:px-6 lg:py-3 lg:text-base lg:bg-[#c00000] lg:text-white lg:hover:bg-[#a00000] lg:active:bg-[#900000]"
+              >
+                重置名單
+              </button>
+              <label className="flex cursor-pointer items-center gap-2 text-xs text-white lg:text-sm lg:text-gray-600">
+                <input
+                  type="checkbox"
+                  checked={soundEnabled}
+                  onChange={(e) => setSoundEnabled(e.target.checked)}
+                  className="h-3.5 w-3.5 accent-white lg:h-4 lg:w-4 lg:accent-[#c00000]"
+                />
+                慶祝音效
+              </label>
+            </div>
+
+            {statusMessage && (
+              <p className="mt-1 text-xs text-white/90 lg:mt-3 lg:text-sm lg:text-[#c00000]">{statusMessage}</p>
+            )}
           </div>
+
+          <a
+            href="https://introvista.ai"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden shrink-0 pt-4 text-center text-xs text-gray-400 transition hover:text-gray-600 lg:block"
+          >
+            © 2026 introvista x fore cons.
+          </a>
+        </div>
       </main>
 
-      {/* ── Row 3: Red decorative band (same height as header) ── */}
-      <div className="flex shrink-0 bg-[#c00000]">
+      {/* Red band — desktop only */}
+      <div className="hidden shrink-0 bg-[#c00000] lg:flex">
         <div className="relative flex-[2]">
           {candidates.length > 0 && (
             <p className="pointer-events-none absolute top-2 left-1/2 z-10 -translate-x-1/2 text-sm text-white">

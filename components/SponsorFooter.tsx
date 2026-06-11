@@ -33,6 +33,14 @@ export function SponsorFooter() {
         onLoad={initKofiWidget}
       />
       <footer className="w-full border-t border-gray-200 bg-white py-4">
+        <a
+          href="https://introvista.ai"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mb-3 block text-center text-xs text-gray-400 transition hover:text-gray-600 lg:hidden"
+        >
+          © 2026 introvista x fore cons.
+        </a>
         <GoogleAd />
       </footer>
     </>

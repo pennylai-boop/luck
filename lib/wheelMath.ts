@@ -17,13 +17,14 @@ export function computeStopRotation(
   winnerIndex: number,
   segmentCount: number,
   currentRotation: number,
-  extraSpins = 6
+  extraSpins = 6,
+  pointerOffset = POINTER_OFFSET
 ): number {
   if (segmentCount <= 0) return currentRotation;
 
   const slice = segmentAngle(segmentCount);
   const targetMod =
-    (-winnerIndex * slice - slice / 2 + POINTER_OFFSET + FULL_TURN * 10) %
+    (-winnerIndex * slice - slice / 2 + pointerOffset + FULL_TURN * 10) %
     FULL_TURN;
   const currentMod = ((currentRotation % FULL_TURN) + FULL_TURN) % FULL_TURN;
   let delta = targetMod - currentMod;
