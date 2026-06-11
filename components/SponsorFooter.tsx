@@ -20,7 +20,7 @@ function initKofiWidget() {
     "floating-chat.donateButton.text": "請我喝杯咖啡",
     "floating-chat.donateButton.background-color": BNI_RED,
     "floating-chat.donateButton.text-color": "#fff",
-    "floating-chat.position": "left",
+    "floating-chat.position": "right",
   });
 }
 

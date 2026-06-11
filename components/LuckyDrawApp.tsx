@@ -2,8 +2,6 @@
 
 import { useCallback, useMemo, useRef, useState } from "react";
 import { LotteryWheel } from "@/components/LotteryWheel";
-import { NamesListInput } from "@/components/NamesListInput";
-import { PrizePanel } from "@/components/PrizePanel";
 import { SponsorFooter } from "@/components/SponsorFooter";
 import { WinnerModal } from "@/components/WinnerModal";
 import { parseLines, toListEntries } from "@/lib/parseLines";
@@ -11,10 +9,10 @@ import type { ListEntry } from "@/lib/types";
 import { computeStopRotation, pickRandomIndex } from "@/lib/wheelMath";
 
 const SPIN_MS = 5000;
+const CHROME_BAR_H = "72px";
 
 export function LuckyDrawApp() {
   const [prizeTitle, setPrizeTitle] = useState("");
-  const [imageDataUrl, setImageDataUrl] = useState<string | null>(null);
   const [namesText, setNamesText] = useState("");
   const [wonIds, setWonIds] = useState<Set<string>>(() => new Set());
   const [rotation, setRotation] = useState(0);
@@ -27,11 +25,7 @@ export function LuckyDrawApp() {
   const pendingWinnerRef = useRef<ListEntry | null>(null);
   const spinTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const allEntries = useMemo(
-    () => toListEntries(parseLines(namesText)),
-    [namesText]
-  );
-
+  const allEntries = useMemo(() => toListEntries(parseLines(namesText)), [namesText]);
   const candidates = useMemo(
     () => allEntries.filter((e) => !wonIds.has(e.id)),
     [allEntries, wonIds]
@@ -48,7 +42,6 @@ export function LuckyDrawApp() {
     const winner = pendingWinnerRef.current;
     pendingWinnerRef.current = null;
     setIsSpinning(false);
-
     if (winner) {
       setWonIds((prev) => new Set(prev).add(winner.id));
       setLastWinner(winner);
@@ -59,27 +52,17 @@ export function LuckyDrawApp() {
 
   const handleSpin = useCallback(() => {
     if (isSpinning || candidates.length === 0) {
-      if (candidates.length === 0) {
-        setStatusMessage("無可抽選對象，請新增名單或重置得獎紀錄。");
-      }
+      if (candidates.length === 0) setStatusMessage("無可抽選對象，請新增名單或重置。");
       return;
     }
-
     clearSpinTimer();
     const winnerIndex = pickRandomIndex(candidates.length);
     const winner = candidates[winnerIndex];
     pendingWinnerRef.current = winner;
-
-    const nextRotation = computeStopRotation(
-      winnerIndex,
-      candidates.length,
-      rotation
-    );
-
+    const nextRotation = computeStopRotation(winnerIndex, candidates.length, rotation);
     setIsSpinning(true);
     setStatusMessage(null);
     setRotation(nextRotation);
-
     spinTimerRef.current = setTimeout(finishSpin, SPIN_MS);
   }, [isSpinning, candidates, rotation, clearSpinTimer, finishSpin]);
 
@@ -90,103 +73,128 @@ export function LuckyDrawApp() {
     setModalOpen(false);
     setLastWinner(null);
     setIsSpinning(false);
-    setStatusMessage("已重置得獎紀錄，可重新抽獎。");
+    setStatusMessage(null);
   }, [clearSpinTimer]);
 
-  const closeModal = useCallback(() => {
-    setModalOpen(false);
-  }, []);
+  const closeModal = useCallback(() => setModalOpen(false), []);
 
   return (
-    <div className="bg-[var(--bg)]">
-      <div className="relative mx-auto flex h-[1080px] w-full max-w-[1920px] flex-col overflow-hidden">
-        <header className="shrink-0 border-b border-[var(--bni-red)]/20 bg-white py-4 pl-2 pr-4 shadow-sm">
-          <div className="mx-auto flex w-full max-w-[1920px] flex-wrap items-center justify-between gap-3">
-            <div>
-              <h1 className="text-2xl font-bold text-[var(--bni-red)]">
-                BNI Lucky Draw
-              </h1>
-              <p className="text-xs text-[var(--text-muted)]">
-                商務例會抽獎 · 僅本次瀏覽有效，關閉分頁即重置
-              </p>
-            </div>
-            <div className="flex flex-wrap items-center gap-3">
-              <label className="flex cursor-pointer items-center gap-2 text-sm text-[var(--text)]">
-                <input
-                  type="checkbox"
-                  checked={soundEnabled}
-                  onChange={(e) => setSoundEnabled(e.target.checked)}
-                  className="h-4 w-4 accent-[var(--bni-red)]"
-                />
-                慶祝音效
+    <>
+    {/* header + wheel/panel + red band = exactly 100vh */}
+    <div
+      className="relative grid h-screen overflow-x-hidden bg-white"
+      style={{ gridTemplateRows: `${CHROME_BAR_H} 1fr ${CHROME_BAR_H}` }}
+    >
+      {/* ── Row 1: Header ── */}
+      <header className="flex shrink-0 flex-col justify-center bg-[#c00000] px-6 py-3">
+        <h1 className="text-2xl font-extrabold tracking-wide text-white">抽獎輪盤</h1>
+        <p className="text-xs text-white/75">活動抽獎使用，關閉畫面即重置</p>
+      </header>
+
+      {/* ── Row 2: Wheel + control panel ── */}
+      <main className="flex h-full min-h-0 overflow-visible">
+
+          {/* Left — white wheel area, 2/3 width */}
+          <div className="flex h-full min-h-0 flex-[2] items-center justify-center overflow-visible bg-white">
+            <LotteryWheel
+              candidates={candidates}
+              rotation={rotation}
+              isSpinning={isSpinning}
+              onSpin={handleSpin}
+              prizeTitle={prizeTitle}
+            />
+          </div>
+
+          {/* Right — control panel, 1/3 width */}
+          <div className="flex w-1/3 shrink-0 flex-col justify-center bg-white px-8 py-8">
+
+            {/* 項目名稱 */}
+            <div className="mb-6">
+              <label
+                htmlFor="prize-title"
+                className="mb-2 block text-lg font-bold text-[#c00000]"
+              >
+                項目名稱
               </label>
+              <input
+                id="prize-title"
+                type="text"
+                value={prizeTitle}
+                onChange={(e) => setPrizeTitle(e.target.value)}
+                disabled={isSpinning}
+                placeholder="輸入抽獎項目名稱"
+                className="w-full rounded-xl border-4 border-[#c00000] px-4 py-3 text-sm text-gray-700 transition focus:outline-none disabled:opacity-60"
+              />
+            </div>
+
+            {/* 抽獎名單 */}
+            <div className="mb-6">
+              <label
+                htmlFor="names-input"
+                className="mb-2 block text-lg font-bold text-[#c00000]"
+              >
+                抽獎名單
+              </label>
+              <textarea
+                id="names-input"
+                value={namesText}
+                onChange={(e) => setNamesText(e.target.value)}
+                disabled={isSpinning}
+                rows={7}
+                placeholder="輸入參與者姓名，以空格、換行或標點符號分隔…"
+                className="w-full resize-none rounded-xl border-4 border-[#c00000] px-4 py-3 text-sm text-gray-700 transition focus:outline-none disabled:opacity-60"
+              />
+            </div>
+
+            {/* Reset + Sound */}
+            <div className="flex items-center gap-3">
               <button
                 type="button"
                 onClick={resetWinners}
                 disabled={isSpinning}
-                className="rounded-lg border border-[var(--bni-red)] px-4 py-2 text-sm font-medium text-[var(--bni-red)] transition hover:bg-[var(--bni-cream)] disabled:opacity-50"
+                className="flex-1 rounded-xl bg-[#c00000] px-6 py-3 text-base font-bold text-white shadow-md transition hover:bg-[#a00000] active:bg-[#900000] disabled:opacity-50"
               >
-                重置得獎紀錄
+                重置名單
               </button>
+              <label className="flex cursor-pointer items-center gap-2 text-sm text-gray-600">
+                <input
+                  type="checkbox"
+                  checked={soundEnabled}
+                  onChange={(e) => setSoundEnabled(e.target.checked)}
+                  className="h-4 w-4 accent-[#c00000]"
+                />
+                慶祝音效
+              </label>
             </div>
-          </div>
-          {statusMessage && (
-            <p className="mx-auto mt-2 w-full max-w-[1920px] text-center text-sm text-[var(--bni-red-dark)]">
-              {statusMessage}
-            </p>
-          )}
-        </header>
 
-        {/* 抽獎項目：左側浮動，位於 Ko-fi 按鈕上方 */}
-        <div
-          className="fixed left-4 z-40 w-[380px] max-w-[calc(100vw-2rem)]"
-          style={{
-            bottom: "var(--float-prize-bottom)",
-            maxHeight: "calc(100vh - var(--float-prize-bottom) - 1rem)",
-          }}
-        >
-          <div className="max-h-[inherit] overflow-y-auto rounded-2xl shadow-xl">
-            <PrizePanel
-              title={prizeTitle}
-              imageDataUrl={imageDataUrl}
-              namesText={namesText}
-              onTitleChange={setPrizeTitle}
-              onImageChange={setImageDataUrl}
-              onNamesChange={setNamesText}
-              disabled={isSpinning}
-            />
-          </div>
-        </div>
+            {statusMessage && (
+              <p className="mt-3 text-sm text-[#c00000]">{statusMessage}</p>
+            )}
 
-        <main className="mx-auto flex w-full max-w-[1920px] min-h-0 flex-1 flex-col pl-2 pt-2 pr-4 pb-4">
-          <div className="flex min-h-0 flex-1 items-center justify-center">
-            <div className="@container flex h-full min-h-0 w-full min-w-0 flex-col items-center justify-center">
-              <LotteryWheel
-                candidates={candidates}
-                rotation={rotation}
-                isSpinning={isSpinning}
-                onSpin={handleSpin}
-              />
-            </div>
-          </div>
-          <p className="mt-2 shrink-0 text-center">
+            {/* Copyright */}
             <a
               href="https://introvista.ai"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-xs text-[var(--text-muted)] transition hover:text-[var(--text)]"
-              aria-label="Copyright 2026 introvista x fore cons."
+              className="mt-auto pt-6 text-center text-xs text-gray-400 transition hover:text-gray-600"
             >
-              <span aria-hidden className="text-sm leading-none">
-                ©
-              </span>
-              <span>2026 introvista x fore cons.</span>
+              © 2026 introvista x fore cons.
             </a>
-          </p>
-        </main>
-      </div>
+          </div>
+      </main>
 
-      <SponsorFooter />
+      {/* ── Row 3: Red decorative band (same height as header) ── */}
+      <div className="flex shrink-0 bg-[#c00000]">
+        <div className="relative flex-[2]">
+          {candidates.length > 0 && (
+            <p className="pointer-events-none absolute top-2 left-1/2 z-10 -translate-x-1/2 text-sm text-white">
+              尚可抽選：
+              <span className="font-semibold">{candidates.length}</span> 項
+            </p>
+          )}
+        </div>
+        <div className="w-1/3 shrink-0" aria-hidden />
+      </div>
 
       <WinnerModal
         open={modalOpen}
@@ -195,7 +203,9 @@ export function LuckyDrawApp() {
         soundEnabled={soundEnabled}
         onClose={closeModal}
       />
-
     </div>
+
+    <SponsorFooter />
+    </>
   );
 }

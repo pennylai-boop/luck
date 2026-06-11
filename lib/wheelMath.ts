@@ -1,5 +1,8 @@
 const FULL_TURN = 360;
 
+/** 指針固定在 12 點鐘；與 conic-gradient / 標籤座標對齊的偏移 */
+const POINTER_OFFSET = 90;
+
 /** Degrees per segment for n equal slices. */
 export function segmentAngle(count: number): number {
   if (count <= 0) return 0;
@@ -7,9 +10,8 @@ export function segmentAngle(count: number): number {
 }
 
 /**
- * Wheel SVG is drawn with segment 0 starting at 12 o'clock, clockwise.
- * Pointer is fixed at 12 o'clock. Returns final rotation (deg) so segment `winnerIndex`
- * center aligns under the pointer, plus extra full spins.
+ * 扇區 0 起於 12 點鐘、順時針排列；指針固定於 12 點鐘。
+ * 回傳最終旋轉角，使第 winnerIndex 扇區中心對準指針尖端下方。
  */
 export function computeStopRotation(
   winnerIndex: number,
@@ -20,8 +22,9 @@ export function computeStopRotation(
   if (segmentCount <= 0) return currentRotation;
 
   const slice = segmentAngle(segmentCount);
-  // Center of winner segment at 12 o'clock when rotation = -winnerIndex * slice - slice/2
-  const targetMod = (-winnerIndex * slice - slice / 2 + FULL_TURN * 10) % FULL_TURN;
+  const targetMod =
+    (-winnerIndex * slice - slice / 2 + POINTER_OFFSET + FULL_TURN * 10) %
+    FULL_TURN;
   const currentMod = ((currentRotation % FULL_TURN) + FULL_TURN) % FULL_TURN;
   let delta = targetMod - currentMod;
   if (delta <= 0) delta += FULL_TURN;
