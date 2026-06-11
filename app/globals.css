@@ -17,11 +17,16 @@
   --input-bg: #ffffff;
 }
 
+html {
+  overflow-x: hidden;
+}
+
 body {
   background: #ffffff;
   color: var(--text);
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans TC",
     sans-serif;
+  overflow-x: hidden;
 }
 
 @keyframes modalIn {

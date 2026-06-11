@@ -82,7 +82,7 @@ export function LuckyDrawApp() {
     <>
     {/* header + wheel/panel + red band = exactly 100vh */}
     <div
-      className="relative grid h-screen overflow-x-hidden bg-white"
+      className="relative grid h-screen overflow-hidden bg-white"
       style={{ gridTemplateRows: `${CHROME_BAR_H} 1fr ${CHROME_BAR_H}` }}
     >
       {/* ── Row 1: Header ── */}
@@ -106,77 +106,78 @@ export function LuckyDrawApp() {
           </div>
 
           {/* Right — control panel, 1/3 width */}
-          <div className="flex w-1/3 shrink-0 flex-col justify-center bg-white px-8 py-8">
-
-            {/* 項目名稱 */}
-            <div className="mb-6">
-              <label
-                htmlFor="prize-title"
-                className="mb-2 block text-lg font-bold text-[#c00000]"
-              >
-                項目名稱
-              </label>
-              <input
-                id="prize-title"
-                type="text"
-                value={prizeTitle}
-                onChange={(e) => setPrizeTitle(e.target.value)}
-                disabled={isSpinning}
-                placeholder="輸入抽獎項目名稱"
-                className="w-full rounded-xl border-4 border-[#c00000] px-4 py-3 text-sm text-gray-700 transition focus:outline-none disabled:opacity-60"
-              />
-            </div>
-
-            {/* 抽獎名單 */}
-            <div className="mb-6">
-              <label
-                htmlFor="names-input"
-                className="mb-2 block text-lg font-bold text-[#c00000]"
-              >
-                抽獎名單
-              </label>
-              <textarea
-                id="names-input"
-                value={namesText}
-                onChange={(e) => setNamesText(e.target.value)}
-                disabled={isSpinning}
-                rows={7}
-                placeholder="輸入參與者姓名，以空格、換行或標點符號分隔…"
-                className="w-full resize-none rounded-xl border-4 border-[#c00000] px-4 py-3 text-sm text-gray-700 transition focus:outline-none disabled:opacity-60"
-              />
-            </div>
-
-            {/* Reset + Sound */}
-            <div className="flex items-center gap-3">
-              <button
-                type="button"
-                onClick={resetWinners}
-                disabled={isSpinning}
-                className="flex-1 rounded-xl bg-[#c00000] px-6 py-3 text-base font-bold text-white shadow-md transition hover:bg-[#a00000] active:bg-[#900000] disabled:opacity-50"
-              >
-                重置名單
-              </button>
-              <label className="flex cursor-pointer items-center gap-2 text-sm text-gray-600">
+          <div className="flex h-full w-1/3 shrink-0 flex-col overflow-hidden bg-white px-8 py-8">
+            <div className="flex min-h-0 flex-1 flex-col justify-center">
+              {/* 項目名稱 */}
+              <div className="mb-6">
+                <label
+                  htmlFor="prize-title"
+                  className="mb-2 block text-lg font-bold text-[#c00000]"
+                >
+                  項目名稱
+                </label>
                 <input
-                  type="checkbox"
-                  checked={soundEnabled}
-                  onChange={(e) => setSoundEnabled(e.target.checked)}
-                  className="h-4 w-4 accent-[#c00000]"
+                  id="prize-title"
+                  type="text"
+                  value={prizeTitle}
+                  onChange={(e) => setPrizeTitle(e.target.value)}
+                  disabled={isSpinning}
+                  placeholder="輸入抽獎項目名稱"
+                  className="w-full rounded-xl border-4 border-[#c00000] px-4 py-3 text-sm text-gray-700 transition focus:outline-none disabled:opacity-60"
                 />
-                慶祝音效
-              </label>
+              </div>
+
+              {/* 抽獎名單 */}
+              <div className="mb-6">
+                <label
+                  htmlFor="names-input"
+                  className="mb-2 block text-lg font-bold text-[#c00000]"
+                >
+                  抽獎名單
+                </label>
+                <textarea
+                  id="names-input"
+                  value={namesText}
+                  onChange={(e) => setNamesText(e.target.value)}
+                  disabled={isSpinning}
+                  rows={7}
+                  placeholder="輸入參與者姓名，以空格、換行或標點符號分隔…"
+                  className="w-full resize-none rounded-xl border-4 border-[#c00000] px-4 py-3 text-sm text-gray-700 transition focus:outline-none disabled:opacity-60"
+                />
+              </div>
+
+              {/* Reset + Sound */}
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={resetWinners}
+                  disabled={isSpinning}
+                  className="flex-1 rounded-xl bg-[#c00000] px-6 py-3 text-base font-bold text-white shadow-md transition hover:bg-[#a00000] active:bg-[#900000] disabled:opacity-50"
+                >
+                  重置名單
+                </button>
+                <label className="flex cursor-pointer items-center gap-2 text-sm text-gray-600">
+                  <input
+                    type="checkbox"
+                    checked={soundEnabled}
+                    onChange={(e) => setSoundEnabled(e.target.checked)}
+                    className="h-4 w-4 accent-[#c00000]"
+                  />
+                  慶祝音效
+                </label>
+              </div>
+
+              {statusMessage && (
+                <p className="mt-3 text-sm text-[#c00000]">{statusMessage}</p>
+              )}
             </div>
 
-            {statusMessage && (
-              <p className="mt-3 text-sm text-[#c00000]">{statusMessage}</p>
-            )}
-
-            {/* Copyright */}
+            {/* Copyright — pinned to bottom */}
             <a
               href="https://introvista.ai"
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-auto pt-6 text-center text-xs text-gray-400 transition hover:text-gray-600"
+              className="shrink-0 pt-4 text-center text-xs text-gray-400 transition hover:text-gray-600"
             >
               © 2026 introvista x fore cons.
             </a>
